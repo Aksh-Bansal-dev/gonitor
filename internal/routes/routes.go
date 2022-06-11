@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-    "example.com/gonitor/internal/stat"
+	"example.com/gonitor/internal/stat"
 )
 
 type PingResponse struct {
@@ -18,8 +18,7 @@ var FileServer = http.FileServer(http.Dir("./static"))
 func Routes() {
 	http.Handle("/static/", http.StripPrefix("/static/", FileServer))
 	http.HandleFunc("/ping", pingHandler)
-	http.HandleFunc("/cpu", cpuHandler)
-	http.HandleFunc("/ram", ramHandler)
+	http.HandleFunc("/stats", statsHandler)
 }
 
 func pingHandler(w http.ResponseWriter, r *http.Request) {
@@ -27,32 +26,29 @@ func pingHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(PingResponse{Message: "pong"})
 }
 
-func ramHandler(w http.ResponseWriter, r *http.Request) {
+func statsHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		http.Error(w, "Method not supported", 405)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
-    res,err:= stat.GetRAMUsage()
-    if err!=nil{
+	res, err := stat.GetRAMUsage()
+	if err != nil {
 		log.Println(err)
 		http.Error(w, "Internal server error", 500)
-    }
-	data := fmt.Sprintf("%.2f",res)
-	json.NewEncoder(w).Encode(map[string]string{"data": data})
-}
-func cpuHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "GET" {
-		http.Error(w, "Method not supported", 405)
-		return
 	}
-	w.Header().Set("Content-Type", "application/json")
-    res,err := stat.GetCpuUsage()
-	data := fmt.Sprintf("%.2f",res)
-    if err!=nil{
+	ram := fmt.Sprintf("%.2f", res)
+	res, err = stat.GetCpuUsage()
+	if err != nil {
 		log.Println(err)
 		http.Error(w, "Internal server error", 500)
-        return
-    }
-	json.NewEncoder(w).Encode(map[string]string{"data": data})
+	}
+	cpu := fmt.Sprintf("%.2f", res)
+	res, err = stat.GetDiskUsage()
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Internal server error", 500)
+	}
+	disk := fmt.Sprintf("%.2f", res)
+	json.NewEncoder(w).Encode(map[string]string{"ram": ram, "cpu": cpu, "disk": disk})
 }
