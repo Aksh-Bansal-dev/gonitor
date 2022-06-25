@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+
 	"example.com/gonitor/internal/routes"
 )
 
