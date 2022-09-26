@@ -6,8 +6,28 @@ A simple tool to monitor linux servers.
 
 It provides endpoints to:
 
-- `/stats` get CPU, RAM, and Disk usage
+- `/stats` gets CPU, RAM, and Disk usage
+- `/healthcheck` pings all endpoints mentioned in the config
 - more coming soon...
+
+## Config
+
+`gonitor.json` must be placed in home folder.
+
+```json
+{
+  "endpoints": [
+    {
+      "name": "Google",
+      "url": "https://www.google.com"
+    },
+    {
+      "name": "booo",
+      "url": "http://localhost:3000"
+    }
+  ]
+}
+```
 
 ## Todo
 
