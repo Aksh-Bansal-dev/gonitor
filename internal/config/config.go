@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"path"
 )
 
 type Endpoint struct {
@@ -16,7 +17,8 @@ type Config struct {
 }
 
 func ReadConfig() Config {
-	data, err := os.ReadFile("gonitor.json")
+	homePath, _ := os.UserHomeDir()
+	data, err := os.ReadFile(path.Join(homePath, "gonitor.json"))
 	if err != nil {
 		log.Println(err)
 		return Config{}
