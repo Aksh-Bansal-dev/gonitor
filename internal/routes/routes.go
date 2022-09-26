@@ -17,7 +17,7 @@ var FileServer = http.FileServer(http.Dir("./static"))
 
 func Routes() {
 	configData := config.ReadConfig()
-	http.Handle("/static/", http.StripPrefix("/static/", FileServer))
+	http.Handle("/", http.StripPrefix("/", FileServer))
 	http.HandleFunc("/ping", pingHandler)
 	http.HandleFunc("/stats", stat.StatsHandler)
 	http.HandleFunc("/healthcheck", func(w http.ResponseWriter, r *http.Request) {
