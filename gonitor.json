@@ -1,0 +1,12 @@
+{
+  "endpoints": [
+    {
+      "name": "Google",
+      "url": "https://www.google.com"
+    },
+    {
+      "name": "booo",
+      "url": "http://localhost:3000"
+    }
+  ]
+}

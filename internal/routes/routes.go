@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"example.com/gonitor/internal/config"
 	"example.com/gonitor/internal/healthcheck"
 	"example.com/gonitor/internal/stat"
 )
@@ -15,10 +16,13 @@ type PingResponse struct {
 var FileServer = http.FileServer(http.Dir("./static"))
 
 func Routes() {
+	configData := config.ReadConfig()
 	http.Handle("/static/", http.StripPrefix("/static/", FileServer))
 	http.HandleFunc("/ping", pingHandler)
 	http.HandleFunc("/stats", stat.StatsHandler)
-	http.HandleFunc("/healthcheck", healthcheck.HealthHandler)
+	http.HandleFunc("/healthcheck", func(w http.ResponseWriter, r *http.Request) {
+		healthcheck.HealthHandler(w, r, configData.Endpoints)
+	})
 }
 
 func pingHandler(w http.ResponseWriter, r *http.Request) {

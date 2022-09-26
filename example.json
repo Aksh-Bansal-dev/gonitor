@@ -1,8 +1,0 @@
-{
-  "endpoints": [
-    {
-      "name": "ServiceA",
-      "url": "http://localhost:3000/ping"
-    }
-  ]
-}
