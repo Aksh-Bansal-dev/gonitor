@@ -18,18 +18,18 @@ func StatsHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		http.Error(w, "Internal server error", 500)
 	}
-	ram := fmt.Sprintf("%.2f", res)
+	ram := fmt.Sprintf("%.2f%%", res)
 	res, err = GetCpuUsage()
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "Internal server error", 500)
 	}
-	cpu := fmt.Sprintf("%.2f", res)
+	cpu := fmt.Sprintf("%.2f%%", res)
 	res, err = GetDiskUsage()
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "Internal server error", 500)
 	}
-	disk := fmt.Sprintf("%.2f", res)
+	disk := fmt.Sprintf("%.2f%%", res)
 	json.NewEncoder(w).Encode(map[string]string{"ram": ram, "cpu": cpu, "disk": disk})
 }
