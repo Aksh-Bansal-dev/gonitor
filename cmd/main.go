@@ -12,10 +12,14 @@ import (
 func main() {
 	routes.Routes()
 
+	addr := os.Getenv("ADDR")
 	port := os.Getenv("PORT")
+	if len(addr) == 0 {
+		addr = "localhost"
+	}
 	if len(port) == 0 {
 		port = "5000"
 	}
-	log.Println("Server started at port:", port)
-	http.ListenAndServe(fmt.Sprintf(":%s", port), nil)
+	log.Printf("Server started at %s:%s", addr, port)
+	http.ListenAndServe(fmt.Sprintf("%s:%s", addr, port), nil)
 }
